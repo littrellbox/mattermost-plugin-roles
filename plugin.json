@@ -1,6 +1,6 @@
 {
-    "id": "com.mattermost.plugin-starter-template",
-    "name": "Plugin Starter Template",
+    "id": "me.william341.mattermost-plugin-roles",
+    "name": "Roles",
     "description": "This plugin serves as a starting point for writing a Mattermost plugin.",
     "version": "0.1.0",
     "min_server_version": "5.12.0",

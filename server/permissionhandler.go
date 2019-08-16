@@ -7,29 +7,29 @@ func (p *Plugin) getUserPermission(userid string, permission string, teamID stri
 
 //only gets user perms, not role perms
 func (p *Plugin) getUserPermissionUO(userID string, permission string, teamID string) (hasPermission bool) {
-    //TODO: implement getting user perms
+	//TODO: implement getting user perms
 	return p.getDefaultPermssion(permission)
 }
 
-func (p *Plugin) getUserPermissions(userID string, teamID string) (permissions map[string]bool){
+func (p *Plugin) getUserPermissions(userID string, teamID string) (permissions map[string]bool) {
 	//TODO: implement getting user perms
 	m := make(map[string]bool)
-	m["send"] = getDefaultPermssion("send");
-	m["files"] = getDefaultPermssion("files");
-	m["mute"] = getDefaultPermssion("mute");
-	m["kick"] = getDefaultPermssion("kick");
-	m["ban"] = getDefaultPermssion("ban");
+	m["send"] = p.getDefaultPermssion("send")
+	m["files"] = p.getDefaultPermssion("files")
+	m["mute"] = p.getDefaultPermssion("mute")
+	m["kick"] = p.getDefaultPermssion("kick")
+	m["ban"] = p.getDefaultPermssion("ban")
 	return m
 }
 
-func (p *Plugin) getUserPermissionsUO(userID string, teamID string) (permissions map[string]bool){
+func (p *Plugin) getUserPermissionsUO(userID string, teamID string) (permissions map[string]bool) {
 	//TODO: implement getting user perms
 	m := make(map[string]bool)
-	m["send"] = getDefaultPermssion("send");
-	m["files"] = getDefaultPermssion("files");
-	m["mute"] = getDefaultPermssion("mute");
-	m["kick"] = getDefaultPermssion("kick");
-	m["ban"] = getDefaultPermssion("ban");
+	m["send"] = p.getDefaultPermssion("send")
+	m["files"] = p.getDefaultPermssion("files")
+	m["mute"] = p.getDefaultPermssion("mute")
+	m["kick"] = p.getDefaultPermssion("kick")
+	m["ban"] = p.getDefaultPermssion("ban")
 	return m
 }
 
@@ -49,19 +49,19 @@ func (p *Plugin) getDefaultPermssion(permission string) (hasPermission bool) {
 	}
 }
 
-func (p *Plugin) getRolePermission(roleName string, teamID string, permission string) (hasPermission bool){
-    //TODO: implement getting role perms
+func (p *Plugin) getRolePermission(roleName string, teamID string, permission string) (hasPermission bool) {
+	//TODO: implement getting role perms
 	return p.getDefaultPermssion(permission)
 }
 
-func (p *Plugin) getRolePermissions(roleName string, teamID string) (permissions map[string]bool){
+func (p *Plugin) getRolePermissions(roleName string, teamID string) (permissions map[string]bool) {
 	//TODO: implement getting role perms
 	m := make(map[string]bool)
-	m["send"] = getDefaultPermssion("send");
-	m["files"] = getDefaultPermssion("files");
-	m["mute"] = getDefaultPermssion("mute");
-	m["kick"] = getDefaultPermssion("kick");
-	m["ban"] = getDefaultPermssion("ban");
+	m["send"] = p.getDefaultPermssion("send")
+	m["files"] = p.getDefaultPermssion("files")
+	m["mute"] = p.getDefaultPermssion("mute")
+	m["kick"] = p.getDefaultPermssion("kick")
+	m["ban"] = p.getDefaultPermssion("ban")
 	return m
 }
 
