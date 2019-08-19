@@ -45,7 +45,6 @@ export default class RolesModal extends React.PureComponent {
         
         var panelBodyStyle = {
             color: this.props.theme.centerChannelColor,
-            height: '50px',
             backgroundColor: this.props.theme.centerChannelBg
         }
 
