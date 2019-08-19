@@ -3,7 +3,7 @@ import React from 'react';
 // eslint-disable-next-line no-unused-vars
 import PropTypes from 'prop-types';
 import {FormattedMessage} from 'react-intl';
-import RulesModal from '../rules_modal'
+import RolesModal from '../roles_modal'
 
 // LeftSidebarHeader is a pure component, later connected to the Redux store so as to
 // show the plugin's enabled / disabled status.
@@ -50,6 +50,8 @@ export default class LeftSidebarHeader extends React.PureComponent {
                 color: 'rgba(255,255,255,0.6)',
             }
         } 
+        
+        
 
         return (
             <div style={style} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover} onClick={this.toggleModal}>
@@ -62,7 +64,7 @@ export default class LeftSidebarHeader extends React.PureComponent {
                     defaultMessage='Nothing'
                 />
                 {this.state.showingRoleBox &&
-                    <RulesModal doClose={this.toggleModal}/>
+                    <RolesModal doClose={this.toggleModal}/>
                 }
             </div>
         );
