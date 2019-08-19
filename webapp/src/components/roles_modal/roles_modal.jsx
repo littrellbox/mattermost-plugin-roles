@@ -35,6 +35,20 @@ export default class RolesModal extends React.PureComponent {
     }
 
     render() {
+        
+        var menuItemStyle = {
+            color: this.props.theme.buttonColor
+        }
+        
+        var modalStyle = {
+            overflowY: 'visible'
+        }
+        
+        var buttonStyle = {
+            color: this.props.theme.buttonColor,
+            backgroundColor: this.props.theme.buttonBg
+        }
+        
         return (
             <Modal
                 show={true}
@@ -48,26 +62,26 @@ export default class RolesModal extends React.PureComponent {
                     </h4>
                 </Modal.Header>
                 <Modal.Body>
-                    <InputGroup className="mb-3">
+                    <InputGroup>
                         <DropdownButton
-                            as={InputGroup.Prepend}
-                            variant="outline-secondary"
+                            componentClass={InputGroup.Button}
                             title="Nothings"
-                            id="input-group-dropdown-1"
+                            id="input-dropdown-addon"
+                            style={buttonStyle}
                         >
-                            <MenuItem eventKey="1">Nothing</MenuItem>
-                            <MenuItem eventKey="2">Nothing 2</MenuItem>
-                            <MenuItem eventKey="3">Nothing 3</MenuItem>
+                            <MenuItem style={menuItemStyle} eventKey="1">Nothing</MenuItem>
+                            <MenuItem style={menuItemStyle} eventKey="2">Nothing 2</MenuItem>
+                            <MenuItem style={menuItemStyle} eventKey="3">Nothing 3</MenuItem>
                             <MenuItem divider />
-                            <MenuItem eventKey="4">New Nothing</MenuItem>
+                            <MenuItem style={menuItemStyle} eventKey="4">New Nothing</MenuItem>
                         </DropdownButton>
                         <FormControl
                             placeholder="Nothing name"
                             aria-label="Name of role"
                         />
-                        <InputGroup.Append>
-                            <Button variant="outline-secondary">Do Nothing</Button>
-                        </InputGroup.Append>
+                        <InputGroup.Button>
+                            <Button style={buttonStyle} variant="outline-secondary">Do Nothing</Button>
+                        </InputGroup.Button>
                     </InputGroup>
                 </Modal.Body>
                 <Modal.Footer>
