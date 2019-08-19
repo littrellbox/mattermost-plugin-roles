@@ -47,13 +47,13 @@ export default class LeftSidebarHeader extends React.PureComponent {
 
         if (this.state.hover) {
             style = {
-                padding: '3.5px 12px 3.5px 15px',
+                padding: '8.5px 12px 8.5px 15px',
                 color: 'rgba(255,255,255,0.6)',
                 backgroundColor: this.props.theme.sidebarTextHoverBg,   
             }
         } else {
             style = {
-                padding: '3.5px 12px 3.5px 15px',
+                padding: '8.5px 12px 8.5px 15px',
                 color: 'rgba(255,255,255,0.6)',
             }
         } 
@@ -72,7 +72,7 @@ export default class LeftSidebarHeader extends React.PureComponent {
                 />
                 <div onClick={this.handleChildClick}>
                     {this.state.showingRoleBox &&
-                        <RolesModal doClose={this.toggleModal}/>
+                        <RolesModal theme={this.props.theme} doClose={this.toggleModal}/>
                     }
                 </div>
             </div>
