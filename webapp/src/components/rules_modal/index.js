@@ -1,9 +1,6 @@
 import {connect} from 'react-redux';
 
-// eslint-disable-next-line no-unused-vars
-import {isEnabled} from 'selectors';
-
-import RulesModal from './modal';
+import RulesModal from './rules_modal';
 
 // eslint-disable-next-line no-unused-vars
 const mapStateToProps = (state) => ({

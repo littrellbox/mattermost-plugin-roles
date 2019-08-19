@@ -3,6 +3,7 @@ import React from 'react';
 // eslint-disable-next-line no-unused-vars
 import PropTypes from 'prop-types';
 import {FormattedMessage} from 'react-intl';
+import RulesModal from '../rules_modal'
 
 // LeftSidebarHeader is a pure component, later connected to the Redux store so as to
 // show the plugin's enabled / disabled status.
@@ -15,12 +16,19 @@ export default class LeftSidebarHeader extends React.PureComponent {
         this.setState({hover: !this.state.hover});
     }
 
+    toggleModal() {
+        this.setState({showingRoleBox: !this.state.showingRoleBox, });
+        this.setState({hover: false});
+    }
+
     constructor(props) {
         super(props)
         this.state = {
-            hover: false
+            hover: false,
+            showingRoleBox: false
         }
         this.toggleHover = this.toggleHover.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
     }
 
     render() {
@@ -44,7 +52,7 @@ export default class LeftSidebarHeader extends React.PureComponent {
         } 
 
         return (
-            <div style={style} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}>
+            <div style={style} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover} onClick={this.toggleModal}>
                 <i
                     className='icon fa fa-plug'
                     style={iconStyle}
@@ -53,6 +61,9 @@ export default class LeftSidebarHeader extends React.PureComponent {
                     id='sidebar.demo'
                     defaultMessage='Nothing'
                 />
+                {this.state.showingRoleBox &&
+                    <RulesModal doClose={this.toggleModal}/>
+                }
             </div>
         );
     }
