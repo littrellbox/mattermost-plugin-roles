@@ -31,6 +31,13 @@ export default class LeftSidebarHeader extends React.PureComponent {
         this.toggleModal = this.toggleModal.bind(this);
     }
 
+    handleChildClick(e) {
+        e.stopPropagation();
+        //e.preventDefault();
+        //e.stopImmediatePropagation()
+        console.log('handleChildClick');
+    }
+    
     render() {
         const iconStyle = {
             display: 'inline-block',
@@ -63,9 +70,11 @@ export default class LeftSidebarHeader extends React.PureComponent {
                     id='sidebar.demo'
                     defaultMessage='Nothing'
                 />
-                {this.state.showingRoleBox &&
-                    <RolesModal doClose={this.toggleModal}/>
-                }
+                <div onClick={this.handleChildClick}>
+                    {this.state.showingRoleBox &&
+                        <RolesModal doClose={this.toggleModal}/>
+                    }
+                </div>
             </div>
         );
     }

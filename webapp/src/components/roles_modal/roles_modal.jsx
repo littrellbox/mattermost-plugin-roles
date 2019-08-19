@@ -4,11 +4,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {FormattedMessage} from 'react-intl';
 import {Modal} from 'react-bootstrap';
-import InputGroup from 'react-bootstrap/InputGroup'
-import FormControl from 'react-bootstrap/FormControl'
-import DropdownButton from 'react-bootstrap/DropdownButton'
-import Dropdown from 'react-bootstrap/Dropdown'
-import Button from 'react-bootstrap/Button'
+import {InputGroup} from 'react-bootstrap'
+import {FormControl} from 'react-bootstrap'
+import {DropdownButton} from 'react-bootstrap'
+import {Dropdown} from 'react-bootstrap'
+import {MenuItem} from 'react-bootstrap'
+import {Button} from 'react-bootstrap'
 
 
 const SMALL_SCREEN_WIDTH = 900;
@@ -28,6 +29,9 @@ export default class RolesModal extends React.PureComponent {
 
     handleChildClick(e) {
         e.stopPropagation();
+        //e.preventDefault();
+        //e.stopImmediatePropagation()
+        console.log('handleChildClick');
     }
 
     render() {
@@ -51,11 +55,11 @@ export default class RolesModal extends React.PureComponent {
                             title="Nothings"
                             id="input-group-dropdown-1"
                         >
-                            <Dropdown.Item href="#">Nothing</Dropdown.Item>
-                            <Dropdown.Item href="#">Nothing 2</Dropdown.Item>
-                            <Dropdown.Item href="#">Nothing 3</Dropdown.Item>
-                            <Dropdown.Divider />
-                            <Dropdown.Item href="#">New Nothing</Dropdown.Item>
+                            <MenuItem eventKey="1">Nothing</MenuItem>
+                            <MenuItem eventKey="2">Nothing 2</MenuItem>
+                            <MenuItem eventKey="3">Nothing 3</MenuItem>
+                            <MenuItem divider />
+                            <MenuItem eventKey="4">New Nothing</MenuItem>
                         </DropdownButton>
                         <FormControl
                             placeholder="Nothing name"
