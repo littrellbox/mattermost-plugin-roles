@@ -12,6 +12,7 @@ import {MenuItem} from 'react-bootstrap'
 import {Checkbox} from 'react-bootstrap'
 import {Button} from 'react-bootstrap'
 
+var roleDropdownName = "Roles";
 
 const SMALL_SCREEN_WIDTH = 900;
 
@@ -20,8 +21,14 @@ export default class RolesModal extends React.PureComponent {
         enabled: PropTypes.bool.isRequired,
     }*/
 
+    changeDropdownName(e) {
+        //TODO: Change the dropdown text
+    }
+
     constructor(props) {
         super(props)
+
+        this.changeDropdownName = this.changeDropdownName.bind(this);
     }
 
     isSmall = () => {
@@ -75,64 +82,73 @@ export default class RolesModal extends React.PureComponent {
                     <InputGroup>
                         <DropdownButton
                             componentClass={InputGroup.Button}
-                            title="Nothings"
+                            title="Roles"
                             id="input-dropdown-addon"
                             style={buttonStyle}
+                            onChange={this.changeDropdownName}
                         >
                             <MenuItem eventKey="1">Nothing</MenuItem>
                             <MenuItem eventKey="2">Nothing 2</MenuItem>
                             <MenuItem eventKey="3">Nothing 3</MenuItem>
                             <MenuItem divider />
-                            <MenuItem eventKey="4">New Nothing</MenuItem>
+                            <MenuItem eventKey="4">New Role</MenuItem>
                         </DropdownButton>
                         <FormControl
-                            placeholder="Nothing name"
+                            placeholder="Role Name"
                             aria-label="Name of role"
                         />
                         <InputGroup.Button>
-                            <Button style={buttonStyle} variant="outline-secondary">Do Nothing</Button>
+                            <Button style={buttonStyle} variant="outline-secondary">Create</Button>
                         </InputGroup.Button>
                     </InputGroup>
                     <br/>
                     <Panel>
                         <Panel.Body style={panelBodyStyle}>
                             <Checkbox>
-                                Nothing
+                                Send Messages
                             </Checkbox>
                         </Panel.Body>
-                        <Panel.Footer style={panelFooterStyle}>Description</Panel.Footer>
+                        <Panel.Footer style={panelFooterStyle}>Allows a user to send messages.</Panel.Footer>
                     </Panel>            
                     <Panel>
                         <Panel.Body style={panelBodyStyle}>
                             <Checkbox>
-                                Nothing 2
+                                Upload Files
                             </Checkbox>
                         </Panel.Body>
-                        <Panel.Footer style={panelFooterStyle}>Description</Panel.Footer>
+                        <Panel.Footer style={panelFooterStyle}>Allows a user to upload files.</Panel.Footer>
                     </Panel>     
                     <Panel>
                         <Panel.Body style={panelBodyStyle}>
                             <Checkbox>
-                                Nothing 3
+                                Mute Users
                             </Checkbox>
                         </Panel.Body>
-                        <Panel.Footer style={panelFooterStyle}>Description</Panel.Footer>
+                        <Panel.Footer style={panelFooterStyle}>Allows a user to mute members using the /mute command.</Panel.Footer>
                     </Panel>     
                     <Panel>
                         <Panel.Body style={panelBodyStyle}>
                             <Checkbox>
-                                Nothing 4
+                                Kick Users
                             </Checkbox>
                         </Panel.Body>
-                        <Panel.Footer style={panelFooterStyle}>Description</Panel.Footer>
+                        <Panel.Footer style={panelFooterStyle}>Allows a user to kick members using the /kick command.</Panel.Footer>
                     </Panel>         
                     <Panel>
                         <Panel.Body style={panelBodyStyle}>
                             <Checkbox>
-                                Nothing 5
+                                Ban Users
                             </Checkbox>
                         </Panel.Body>
-                        <Panel.Footer style={panelFooterStyle}>Description</Panel.Footer>
+                        <Panel.Footer style={panelFooterStyle}>Allows a user to ban members using the /ban command.</Panel.Footer>
+                    </Panel>       
+                    <Panel>
+                        <Panel.Body style={panelBodyStyle}>
+                            <Checkbox>
+                                Pin Messages
+                            </Checkbox>
+                        </Panel.Body>
+                        <Panel.Footer style={panelFooterStyle}>Allows a user to pin messages.</Panel.Footer>
                     </Panel>       
                 </Modal.Body>
                 <Modal.Footer>

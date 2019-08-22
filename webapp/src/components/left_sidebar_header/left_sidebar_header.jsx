@@ -68,7 +68,7 @@ export default class LeftSidebarHeader extends React.PureComponent {
                 />
                 <FormattedMessage
                     id='sidebar.demo'
-                    defaultMessage='Nothing'
+                    defaultMessage='Roles'
                 />
                 <div onClick={this.handleChildClick}>
                     {this.state.showingRoleBox &&

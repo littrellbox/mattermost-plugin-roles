@@ -20,13 +20,29 @@ type Plugin struct {
 	configuration *configuration
 }
 
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
+}
+
+func remove(s []string, r string) []string {
+	for i, v := range s {
+		if v == r {
+			return append(s[:i], s[i+1:]...)
+		}
+	}
+	return s
+}
+
 // ServeHTTP demonstrates a plugin that handles HTTP requests by greeting the world.
 func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
 	switch path := r.URL.Path; path {
 	case "/api/v1/roles/user/getpermission":
 		p.handleUserGetPermission(w, r)
-	case "/api/v1/roles/user/setpermission":
-		p.handleUserSetPermission(w, r)
 	case "/api/v1/roles/user/getallpermissions":
 		p.handleUserGetAllPermissions(w, r)
 	case "/api/v1/roles/user/getroles":
@@ -50,6 +66,7 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	}
 }
 
+//MessageWillBePosted handles the message will be posted event.
 func (p *Plugin) MessageWillBePosted(c *plugin.Context, post *model.Post) (*model.Post, string) {
 	//var targetchannel *model.Channel
 	//var err2 *model.AppError
