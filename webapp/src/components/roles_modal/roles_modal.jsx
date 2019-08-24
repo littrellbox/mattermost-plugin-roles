@@ -11,7 +11,8 @@ import {Panel} from 'react-bootstrap'
 import {MenuItem} from 'react-bootstrap'
 import {Checkbox} from 'react-bootstrap'
 import {Button} from 'react-bootstrap'
-
+import {ListGroup} from 'react-bootstrap'
+import {ListGroupItem} from 'react-bootstrap'
 var roleDropdownName = "Roles";
 
 const SMALL_SCREEN_WIDTH = 900;
@@ -149,7 +150,23 @@ export default class RolesModal extends React.PureComponent {
                             </Checkbox>
                         </Panel.Body>
                         <Panel.Footer style={panelFooterStyle}>Allows a user to pin messages.</Panel.Footer>
-                    </Panel>       
+                    </Panel>
+                    <ListGroup>
+                        <ListGroupItem>
+                            <FormControl
+                                type="text"
+                                placeholder="Username"
+                            />
+                            <Button bsStyle="success">
+                                Add User
+                            </Button>
+                        </ListGroupItem>
+                        <ListGroupItem>Member 1 
+                            <Button bsStyle="danger" bsSize="xsmall">
+                                Remove
+                            </Button>
+                        </ListGroupItem>
+                    </ListGroup>       
                 </Modal.Body>
                 <Modal.Footer>
                     <button
@@ -165,25 +182,3 @@ export default class RolesModal extends React.PureComponent {
         );
     }
 }
-
-/*
-import {InputGroup} from 'react-bootstrap';
-import {FormControl} from 'react-bootstrap';
-import {DropdownButton} from 'react-bootstrap';
-import {Dropdown} from 'react-bootstrap';
-import {Button} from 'react-bootstrap';
-
-
-{this.props.enabled ?
-<span>
-    <i
-           className='icon fa fa-plug'
-           style={iconStyle}
-       />
-    <FormattedMessage
-           id='sidebar.demo'
-           defaultMessage='Roles'
-       />
-   </span> :
-<span/>
-}*/

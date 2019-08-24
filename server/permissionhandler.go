@@ -45,6 +45,8 @@ func (p *Plugin) getDefaultPermission(permission string) (hasPermission bool) {
 	}
 }
 
+//TODO: Add team role user list variable
+
 func (p *Plugin) getRolePermission(roleName string, teamID string, permission string) (hasPermission bool) {
 	permissionString, err := p.API.KVGet("lbroles_:" + teamID + ":" + roleName + ":" + permission)
 	if err != nil {
@@ -85,6 +87,7 @@ func (p *Plugin) setRolePermission(roleName string, teamID string, permission st
 }
 
 func (p *Plugin) addUserToRole(roleName string, teamID string, userID string) (statusCode int) {
+	//TODO: Add team role user list variable
 	rolesString, err := p.API.KVGet("lbroles_:" + teamID + ":" + userID + ":roles")
 	if err != nil {
 		p.API.LogError("error adding user to role", "userID", userID)
@@ -99,6 +102,7 @@ func (p *Plugin) addUserToRole(roleName string, teamID string, userID string) (s
 }
 
 func (p *Plugin) removeUserFromRole(roleName string, teamID string, userID string) (statusCode int) {
+	//TODO: Add team role user list variable
 	rolesString, err := p.API.KVGet("lbroles_:" + teamID + ":" + userID + ":roles")
 	if err != nil {
 		p.API.LogError("error adding user to role", "userID", userID)
