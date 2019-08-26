@@ -28,8 +28,12 @@ type userGetAllPermissionsRequest struct {
 }
 
 func (p *Plugin) handleUserGetAllPermissions(w http.ResponseWriter, r *http.Request) {
+	userID := r.Header.Get("Mattermost-User-Id")
 
-	p.API.LogInfo("testing", "test", "a")
+	if userID == "" {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
+	}
 
 	var request userGetAllPermissionsRequest
 
@@ -38,7 +42,7 @@ func (p *Plugin) handleUserGetAllPermissions(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	reqinfo, err := json.Marshal(p.getUserPermissions(request.UserID, request.UserID))
+	reqinfo, err := json.Marshal(p.getUserPermissions(request.UserID, request.TeamID))
 
 	if err != nil {
 		p.API.LogError("failed to convert to json (handleUserGetAllPermissions)", "err", err.Error())

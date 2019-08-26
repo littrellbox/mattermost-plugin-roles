@@ -10,7 +10,7 @@ import (
 func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
 	argumentArray := strings.Split(args.Command, " ")
 
-	if argumentArray[0] == "mutemute" {
+	if argumentArray[0] == "muteuser" {
 		if p.getUserPermission(args.UserId, "mute", args.TeamId) {
 
 		}
