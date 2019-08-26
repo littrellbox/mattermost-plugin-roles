@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"net/http"
 )
 
@@ -27,11 +28,22 @@ type userGetAllPermissionsRequest struct {
 }
 
 func (p *Plugin) handleUserGetAllPermissions(w http.ResponseWriter, r *http.Request) {
-	userID := r.Header.Get("Mattermost-User-Id")
 
-	if userID == "" {
-		http.Error(w, "Not authorized", http.StatusUnauthorized)
+	var request userGetAllPermissionsRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
+	}
+
+	reqinfo, err := json.Marshal(p.getUserPermissions(request.UserID, request.UserID))
+
+	if err != nil {
+		p.API.LogError("failed to convert to json (handleUserGetAllPermissions)", "err", err.Error())
+	}
+
+	if _, err2 := w.Write([]byte(reqinfo)); err2 != nil {
+		p.API.LogError("failed to write response to handleUserGetAllPermissions", "err", err.Error())
 	}
 
 	//handle sending the permissions

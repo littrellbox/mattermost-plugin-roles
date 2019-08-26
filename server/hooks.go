@@ -71,7 +71,7 @@ func (p *Plugin) MessageWillBePosted(c *plugin.Context, post *model.Post) (*mode
 		}
 	}
 
-	muteStatus, err3 := p.API.KVGet("lb_roles:" + targetchannel.TeamId + ":" + targetuser.Username + ":mute")
+	muteStatus, err3 := p.API.KVGet("lb_roles:" + targetchannel.TeamId[0:9] + ":" + targetuser.Username + ":mute")
 
 	if err3 != nil {
 		return nil, "An error has occured determining if the message could be sent or not. (Error determining mute status)"

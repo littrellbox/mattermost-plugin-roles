@@ -2,8 +2,9 @@ package main
 
 import "strings"
 
+//max role name length must be 20
 func (p *Plugin) getUserPermission(userID string, permission string, teamID string) (hasPermission bool) {
-	rolesString, err := p.API.KVGet("lbroles_:" + teamID + ":" + userID + ":roles")
+	rolesString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":" + userID[0:9] + ":roles")
 	if err != nil {
 		p.API.LogError("error adding user to role", "userID", userID)
 		return false
@@ -14,7 +15,7 @@ func (p *Plugin) getUserPermission(userID string, permission string, teamID stri
 	rolesStrings := strings.Split(strings.TrimSpace(string(rolesString)), ",")
 	permissionToFind := false
 	for i := 0; i < len(rolesStrings); i++ {
-		permissionCheck := p.getRolePermission(rolesStrings[i], teamID, permission)
+		permissionCheck := p.getRolePermission(rolesStrings[i], teamID[0:9], permission)
 		if permissionCheck == true {
 			permissionToFind = true
 			break //the user has the permission, stop
@@ -45,10 +46,17 @@ func (p *Plugin) getDefaultPermission(permission string) (hasPermission bool) {
 	}
 }
 
-//TODO: Add team role user list variable
+func (p *Plugin) getRoleMembers(roleName string, teamID string) (members []string) {
+	usersString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":" + roleName + ":users")
+	if err != nil {
+		p.API.LogError("error getting members", "err", err.Error())
+		return nil
+	}
+	return strings.Split(string(usersString), ",")
+}
 
 func (p *Plugin) getRolePermission(roleName string, teamID string, permission string) (hasPermission bool) {
-	permissionString, err := p.API.KVGet("lbroles_:" + teamID + ":" + roleName + ":" + permission)
+	permissionString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":" + roleName + ":" + permission)
 	if err != nil {
 		p.API.LogError("error getting rolePermission", "roleName", roleName)
 		return false
@@ -83,32 +91,48 @@ func (p *Plugin) setRolePermission(roleName string, teamID string, permission st
 		stringToUse = "true"
 	}
 
-	p.API.KVSet("lbroles_:"+teamID+":"+roleName+":"+permission, []byte(stringToUse))
+	p.API.KVSet("lbroles_:"+teamID[0:9]+":"+roleName+":"+permission, []byte(stringToUse))
 }
 
 func (p *Plugin) addUserToRole(roleName string, teamID string, userID string) (statusCode int) {
-	//TODO: Add team role user list variable
-	rolesString, err := p.API.KVGet("lbroles_:" + teamID + ":" + userID + ":roles")
+	rolesString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":" + userID[0:9] + ":roles")
+	rolesUsersString, err2 := p.API.KVGet("lbroles_:" + teamID[0:9] + ":" + roleName + ":users")
 	if err != nil {
-		p.API.LogError("error adding user to role", "userID", userID)
+		p.API.LogError("error adding user to role", "err", err.Error())
+		return 1
+	}
+	if err2 != nil {
+		p.API.LogError("error adding user to role", "err2", err2.Error())
 		return 1
 	}
 	newRolesString := roleName
 	if rolesString != nil {
 		newRolesString = string(rolesString) + "," + roleName
 	}
-	p.API.KVSet("lbroles_:"+teamID+":"+userID+":roles", []byte(newRolesString))
+	newRolesString2 := userID
+	if rolesUsersString != nil {
+		newRolesString2 = string(rolesUsersString) + "," + roleName
+	}
+	p.API.KVSet("lbroles_:"+teamID[0:9]+":"+roleName+":users", []byte(newRolesString2))
+	p.API.KVSet("lbroles_:"+teamID[0:9]+":"+userID[0:9]+":roles", []byte(newRolesString))
 	return 0
 }
 
 func (p *Plugin) removeUserFromRole(roleName string, teamID string, userID string) (statusCode int) {
-	//TODO: Add team role user list variable
-	rolesString, err := p.API.KVGet("lbroles_:" + teamID + ":" + userID + ":roles")
+	rolesString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":" + userID[0:9] + ":roles")
+	rolesUsersString, err2 := p.API.KVGet("lbroles_:" + teamID[0:9] + ":" + roleName + ":users")
 	if err != nil {
 		p.API.LogError("error adding user to role", "userID", userID)
 		return 1
 	}
+	if err2 != nil {
+		p.API.LogError("error adding user to role", "err2", err2.Error())
+		return 1
+	}
 	if rolesString == nil {
+		return 3
+	}
+	if rolesUsersString == nil {
 		return 3
 	}
 	rolesStrings := strings.Split(strings.TrimSpace(string(rolesString)), ",")
@@ -117,13 +141,20 @@ func (p *Plugin) removeUserFromRole(roleName string, teamID string, userID strin
 	} else {
 		return 2
 	}
+	rolesUsersStrings := strings.Split(strings.TrimSpace(string(rolesUsersString)), ",")
+	if stringInSlice(userID, rolesStrings) {
+		rolesUsersStrings = remove(rolesUsersStrings, userID)
+	} else {
+		return 2
+	}
 
-	p.API.KVSet("lbroles_:"+teamID+":"+userID+":roles", []byte(strings.Join(rolesStrings, ",")))
+	p.API.KVSet("lbroles_:"+teamID[0:9]+":"+roleName+":users", []byte(strings.Join(rolesUsersStrings, ",")))
+	p.API.KVSet("lbroles_:"+teamID[0:9]+":"+userID[0:9]+":roles", []byte(strings.Join(rolesStrings, ",")))
 	return 0
 }
 
 func (p *Plugin) createRole(roleName string, teamID string) (statusCode int) {
-	rolesString, err := p.API.KVGet("lbroles_:" + teamID + ":roles")
+	rolesString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":roles")
 	if err != nil {
 		p.API.LogError("error creating role", "teamID", teamID)
 		return 1
@@ -132,12 +163,12 @@ func (p *Plugin) createRole(roleName string, teamID string) (statusCode int) {
 	if rolesString != nil {
 		newRolesString = string(rolesString) + "," + roleName
 	}
-	p.API.KVSet("lbroles_:"+teamID+":roles", []byte(newRolesString))
+	p.API.KVSet("lbroles_:"+teamID[0:9]+":roles", []byte(newRolesString))
 	return 0
 }
 
 func (p *Plugin) destroyRole(roleName string, teamID string) (statusCode int) {
-	rolesString, err := p.API.KVGet("lbroles_:" + teamID + ":roles")
+	rolesString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":roles")
 	if err != nil {
 		p.API.LogError("error destroying role", "teamID", teamID)
 		return 1
@@ -149,6 +180,6 @@ func (p *Plugin) destroyRole(roleName string, teamID string) (statusCode int) {
 		return 2
 	}
 
-	p.API.KVSet("lbroles_:"+teamID+":roles", []byte(strings.Join(rolesStrings, ",")))
+	p.API.KVSet("lbroles_:"+teamID[0:9]+":roles", []byte(strings.Join(rolesStrings, ",")))
 	return 0
 }
