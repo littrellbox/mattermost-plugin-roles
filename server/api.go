@@ -29,6 +29,8 @@ type userGetAllPermissionsRequest struct {
 
 func (p *Plugin) handleUserGetAllPermissions(w http.ResponseWriter, r *http.Request) {
 
+	p.API.LogInfo("testing", "test", "a")
+
 	var request userGetAllPermissionsRequest
 
 	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"sync"
 
+	"github.com/mattermost/mattermost-server/model"
 	"github.com/mattermost/mattermost-server/plugin"
 )
 
@@ -17,6 +18,18 @@ type Plugin struct {
 	// configuration is the active plugin configuration. Consult getConfiguration and
 	// setConfiguration for usage.
 	configuration *configuration
+}
+
+//OnActivate Activates the plugin
+func (p *Plugin) OnActivate() error {
+	p.API.RegisterCommand(&model.Command{
+		Trigger:          "muteuser",
+		AutoComplete:     false,
+		AutoCompleteDesc: "Moderation tool. If you can see this, something's broken.",
+		DisplayName:      "muteuser test",
+	})
+
+	return nil
 }
 
 func stringInSlice(a string, list []string) bool {
