@@ -47,7 +47,7 @@ func (p *Plugin) getDefaultPermission(permission string) (hasPermission bool) {
 }
 
 func (p *Plugin) getRoleMembers(roleName string, teamID string) (members []string) {
-	usersString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":" + roleName + ":users")
+	usersString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":" + roleName[0:19] + ":users")
 	if err != nil {
 		p.API.LogError("error getting members", "err", err.Error())
 		return nil
@@ -56,7 +56,7 @@ func (p *Plugin) getRoleMembers(roleName string, teamID string) (members []strin
 }
 
 func (p *Plugin) getRolePermission(roleName string, teamID string, permission string) (hasPermission bool) {
-	permissionString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":" + roleName + ":" + permission)
+	permissionString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":" + roleName[0:19] + ":" + permission)
 	if err != nil {
 		p.API.LogError("error getting rolePermission", "roleName", roleName)
 		return false
@@ -91,7 +91,7 @@ func (p *Plugin) setRolePermission(roleName string, teamID string, permission st
 		stringToUse = "true"
 	}
 
-	p.API.KVSet("lbroles_:"+teamID[0:9]+":"+roleName+":"+permission, []byte(stringToUse))
+	p.API.KVSet("lbroles_:"+teamID[0:9]+":"+roleName[0:19]+":"+permission, []byte(stringToUse))
 }
 
 func (p *Plugin) addUserToRole(roleName string, teamID string, userID string) (statusCode int) {
@@ -113,7 +113,7 @@ func (p *Plugin) addUserToRole(roleName string, teamID string, userID string) (s
 	if rolesUsersString != nil {
 		newRolesString2 = string(rolesUsersString) + "," + roleName
 	}
-	p.API.KVSet("lbroles_:"+teamID[0:9]+":"+roleName+":users", []byte(newRolesString2))
+	p.API.KVSet("lbroles_:"+teamID[0:9]+":"+roleName[0:19]+":users", []byte(newRolesString2))
 	p.API.KVSet("lbroles_:"+teamID[0:9]+":"+userID[0:9]+":roles", []byte(newRolesString))
 	return 0
 }
@@ -148,7 +148,7 @@ func (p *Plugin) removeUserFromRole(roleName string, teamID string, userID strin
 		return 2
 	}
 
-	p.API.KVSet("lbroles_:"+teamID[0:9]+":"+roleName+":users", []byte(strings.Join(rolesUsersStrings, ",")))
+	p.API.KVSet("lbroles_:"+teamID[0:9]+":"+roleName[0:19]+":users", []byte(strings.Join(rolesUsersStrings, ",")))
 	p.API.KVSet("lbroles_:"+teamID[0:9]+":"+userID[0:9]+":roles", []byte(strings.Join(rolesStrings, ",")))
 	return 0
 }
@@ -159,9 +159,9 @@ func (p *Plugin) createRole(roleName string, teamID string) (statusCode int) {
 		p.API.LogError("error creating role", "teamID", teamID)
 		return 1
 	}
-	newRolesString := roleName
+	newRolesString := roleName[0:19]
 	if rolesString != nil {
-		newRolesString = string(rolesString) + "," + roleName
+		newRolesString = string(rolesString) + "," + roleName[0:19]
 	}
 	p.API.KVSet("lbroles_:"+teamID[0:9]+":roles", []byte(newRolesString))
 	return 0
