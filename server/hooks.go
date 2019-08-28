@@ -39,6 +39,18 @@ func (p *Plugin) MessageWillBeUpdated(c *plugin.Context, newPost, oldPost *model
 	return newPost, ""
 }
 
+func (p *Plugin) UserHasJoinedTeam(c *plugin.Context, teamMember *model.TeamMember, actor *model.User) {
+	banStatus, err3 := p.API.KVGet("lbrm:" + teamMember.TeamId[0:9] + ":" + teamMember.UserId[0:15] + ":ban")
+
+	if err3 != nil {
+		//do something
+	}
+
+	if string(banStatus) == "true" {
+		p.API.DeleteTeamMember(teamMember.TeamId, teamMember.UserId, teamMember.UserId)
+	}
+}
+
 //MessageWillBePosted handles the message will be posted event.
 func (p *Plugin) MessageWillBePosted(c *plugin.Context, post *model.Post) (*model.Post, string) {
 	var targetchannel *model.Channel
