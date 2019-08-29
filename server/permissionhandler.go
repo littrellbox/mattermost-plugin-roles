@@ -93,6 +93,27 @@ func (p *Plugin) getRolePermissions(roleName string, teamID string) (permissions
 	return m
 }
 
+func (p *Plugin) getUserRoles(teamID string, userID string) (roles []string) {
+	rolesString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":" + userID[0:9] + ":roles")
+	if err != nil {
+		p.API.LogError("error adding user to role", "err", err.Error())
+		return nil
+	}
+	rolesStrings := strings.Split(strings.TrimSpace(string(rolesString)), ",")
+	return rolesStrings
+
+}
+
+func (p *Plugin) getTeamRoles(teamID string) (roles []string) {
+	rolesString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":roles")
+	if err != nil {
+		p.API.LogError("error adding user to role", "err", err.Error())
+		return nil
+	}
+	rolesStrings := strings.Split(strings.TrimSpace(string(rolesString)), ",")
+	return rolesStrings
+}
+
 func (p *Plugin) setRolePermission(roleName string, teamID string, permission string, value bool) {
 	//* you may think there is a better way to do this, but there is not.
 	//* why in the world i can't just convert 1, 0, int8(1), int8(0), true or false

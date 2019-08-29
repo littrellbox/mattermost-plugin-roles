@@ -26,6 +26,13 @@ export default class RolesModal extends React.PureComponent {
         //TODO: Change the dropdown text
     }
 
+    createList() {
+        var list = [];
+        for (i=0; i<this.props.roleList.length; i++) {
+            list.push(<MenuItem>{this.props.roleList[i]}</MenuItem>)
+        }
+    }
+
     constructor(props) {
         super(props)
 
@@ -88,9 +95,7 @@ export default class RolesModal extends React.PureComponent {
                             style={buttonStyle}
                             onChange={this.changeDropdownName}
                         >
-                            <MenuItem eventKey="1">Nothing</MenuItem>
-                            <MenuItem eventKey="2">Nothing 2</MenuItem>
-                            <MenuItem eventKey="3">Nothing 3</MenuItem>
+                            {this.createList()}
                             <MenuItem divider />
                             <MenuItem eventKey="4">New Role</MenuItem>
                         </DropdownButton>

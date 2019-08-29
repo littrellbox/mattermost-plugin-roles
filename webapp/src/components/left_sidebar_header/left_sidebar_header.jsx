@@ -16,19 +16,33 @@ export default class LeftSidebarHeader extends React.PureComponent {
         this.setState({hover: !this.state.hover});
     }
 
-    toggleModal() {
-        this.setState({showingRoleBox: !this.state.showingRoleBox, });
-        this.setState({hover: false});
+    startModal() {
+        httpRequest = new XMLHttpRequest();
+        httpRequest.onreadyload = function(e) {
+            if (httpRequest.readyState == 4) {
+                if (httpRequest.status == 200) {
+                    this.setState({
+                        rolelist: JSON.parse(httpRequest.response)
+                    })
+                    this.setState({showingRoleBox: !this.state.showingRoleBox, });
+                    this.setState({hover: false});
+                }
+            }
+        }
+        httpRequest.open('POST', "/plugins/me.william341.mattermost-plugin-roles/api/v1/roles/user/getallpermissions", true);
+        httpRequest.setRequestHeader('Content-Type', 'application/json; charset=UTF-8')
+        httpRequest.send('{"team_id": "' + this.props.teamid + `"}`)
     }
 
     constructor(props) {
         super(props)
         this.state = {
             hover: false,
+            rolelist: [],
             showingRoleBox: false
         }
         this.toggleHover = this.toggleHover.bind(this);
-        this.toggleModal = this.toggleModal.bind(this);
+        this.startModal = this.startModal.bind(this);
     }
 
     handleChildClick(e) {
@@ -61,7 +75,7 @@ export default class LeftSidebarHeader extends React.PureComponent {
         
 
         return (
-            <div style={style} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover} onClick={this.toggleModal}>
+            <div style={style} onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover} onClick={this.startModal}>
                 <i
                     className='icon fa fa-plug'
                     style={iconStyle}
@@ -72,7 +86,7 @@ export default class LeftSidebarHeader extends React.PureComponent {
                 />
                 <div onClick={this.handleChildClick}>
                     {this.state.showingRoleBox &&
-                        <RolesModal theme={this.props.theme} doClose={this.toggleModal}/>
+                        <RolesModal theme={this.props.theme} doClose={this.toggleModal} roleList={this.state.rolelist}/>
                     }
                 </div>
             </div>

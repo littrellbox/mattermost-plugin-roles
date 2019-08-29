@@ -73,6 +73,10 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 		p.handleAddUserToRole(w, r)
 	case "/api/v1/roles/role/removeuser":
 		p.handleRemoveUserFromRole(w, r)
+	case "/api/v1/roles/role/getusers":
+		p.handleGetUsers(w, r)
+	case "/api/v1/roles/role/getteamroles":
+		p.handleGetRoles(w, r)
 	default:
 		http.NotFound(w, r)
 	}
