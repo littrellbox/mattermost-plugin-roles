@@ -1,17 +1,29 @@
 package main
 
-import "strings"
+import (
+	"strings"
+)
 
 //max role name length must be 20
 func (p *Plugin) getUserPermission(userID string, permission string, teamID string) (hasPermission bool) {
-	rolesString, err := p.API.KVGet("lbroles_:" + teamID[0:9] + ":" + userID[0:9] + ":roles")
+	rolesString, err := p.API.KVGet("lbroles_:" + "teamID[0:9]" + ":" + "userID[0:9]" + ":roles")
+
 	if err != nil {
 		p.API.LogError("error adding user to role", "userID", userID)
 		return false
 	}
-	if rolesString == nil || string(rolesString) == "" {
+
+	if rolesString == nil {
+		p.API.LogInfo("plswork", "rolesString", nil)
 		return p.getDefaultPermission(permission)
 	}
+
+	if string(rolesString) == "" {
+		p.API.LogInfo("plswork", "rolesString", nil)
+		return p.getDefaultPermission(permission)
+	}
+
+	p.API.LogInfo("plswork", "b", nil)
 	rolesStrings := strings.Split(strings.TrimSpace(string(rolesString)), ",")
 	permissionToFind := false
 	for i := 0; i < len(rolesStrings); i++ {

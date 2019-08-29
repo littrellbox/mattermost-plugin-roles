@@ -28,6 +28,13 @@ type userGetAllPermissionsRequest struct {
 }
 
 func (p *Plugin) handleUserGetAllPermissions(w http.ResponseWriter, r *http.Request) {
+	var req userGetAllPermissionsRequest
+
+	//body is empty
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+
 	userID := r.Header.Get("Mattermost-User-Id")
 
 	if userID == "" {
@@ -35,24 +42,21 @@ func (p *Plugin) handleUserGetAllPermissions(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	var request userGetAllPermissionsRequest
+	http.Error(w, req.UserID+" "+req.TeamID, http.StatusInternalServerError)
 
-	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
+	reqinfo, err := json.Marshal(p.getUserPermissions(req.UserID, req.TeamID))
 
-	reqinfo, err := json.Marshal(p.getUserPermissions(request.UserID, request.TeamID))
+	p.API.LogDebug("roles string json getallpermissions", "reqinfo", reqinfo)
 
 	if err != nil {
 		p.API.LogError("failed to convert to json (handleUserGetAllPermissions)", "err", err.Error())
 	}
 
-	if _, err2 := w.Write([]byte(reqinfo)); err2 != nil {
-		p.API.LogError("failed to write response to handleUserGetAllPermissions", "err", err.Error())
-	}
+	w.Header().Set("Content-Type", "application/json")
 
-	//handle sending the permissions
+	if _, err2 := w.Write(reqinfo); err2 != nil {
+		p.API.LogError("failed to write response to handleUserGetAllPermissions", "err", err2.Error())
+	}
 }
 
 type userGetRolesRequest struct {
