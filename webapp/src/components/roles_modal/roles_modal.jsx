@@ -22,19 +22,100 @@ export default class RolesModal extends React.PureComponent {
         enabled: PropTypes.bool.isRequired,
     }*/
 
+    setPermission(value, permission) {
+        if (this.state.currentRole == ":new") {
+            return
+        }
+        var request = {}
+        request.role_name = this.state.currentRole
+        request.team_id = this.props.teamid
+        request.permission = permission
+        request.value = value
+        httpRequest = new XMLHttpRequest();
+        httpRequest.onreadyload = function(e) {
+
+        }
+        httpRequest.open('POST', "/plugins/me.william341.mattermost-plugin-roles/api/v1/roles/role/setpermission", true);
+        httpRequest.setRequestHeader('Content-Type', 'application/json; charset=UTF-8')
+        httpRequest.send(JSON.stringify(request))
+    }
+
+    changeSendMessages(e) {
+        this.setPermission(e.target.checked, "send")
+    }
+
+    changeUpload(e) {
+        this.setPermission(e.target.checked, "files")
+    }
+    
+    changeMute(e) {
+        this.setPermission(e.target.checked, "mute")
+    }
+
+    changeKick(e) {
+        this.setPermission(e.target.checked, "kick")
+    }
+
+    changeBan(e) {
+        this.setPermission(e.target.checked, "ban")
+    }
+
+    changePin(e) {
+        this.setPermission(e.target.checked, "pin")
+    }
+
+    addUser(e) {
+        if (this.state.currentRole == ":new") {
+            return
+        }
+        var request = {}
+        request.role_name = this.state.currentRole
+        request.team_id = this.props.teamid
+        request.target_id =
+        httpRequest = new XMLHttpRequest();
+        httpRequest.onreadyload = function(e) {
+
+        }
+        httpRequest.open('POST', "/plugins/me.william341.mattermost-plugin-roles/api/v1/roles/user/getallpermissions", true);
+        httpRequest.setRequestHeader('Content-Type', 'application/json; charset=UTF-8')
+        httpRequest.send(JSON.stringify(request))
+    }
+
+    removeUser(e) {
+        if (this.state.currentRole == ":new") {
+            return
+        }
+        var request = {}
+        request.role_name = this.state.currentRole
+        request.team_id = this.props.teamid
+        request.permission = permission
+        request.value = value
+        httpRequest = new XMLHttpRequest();
+        httpRequest.onreadyload = function(e) {
+
+        }
+        httpRequest.open('POST', "/plugins/me.william341.mattermost-plugin-roles/api/v1/roles/user/getallpermissions", true);
+        httpRequest.setRequestHeader('Content-Type', 'application/json; charset=UTF-8')
+        httpRequest.send(JSON.stringify(request))
+    }
+
     changeDropdownName(e) {
-        //TODO: Change the dropdown text
+        //change the dropdown name and fetch the permissions
+        this.setState({currentRole: e})
     }
 
     createList() {
         var list = [];
         for (i=0; i<this.props.roleList.length; i++) {
-            list.push(<MenuItem>{this.props.roleList[i]}</MenuItem>)
+            list.push(<MenuItem eventKey={this.props.roleList[i]}>{this.props.roleList[i]}</MenuItem>)
         }
     }
 
     constructor(props) {
         super(props)
+        this.state = {
+            currentRole: ":new"
+        }
 
         this.changeDropdownName = this.changeDropdownName.bind(this);
     }
@@ -48,7 +129,6 @@ export default class RolesModal extends React.PureComponent {
     }
 
     render() {
-        
         var menuItemStyle = {
             color: this.props.theme.buttonColor
         }
@@ -109,7 +189,7 @@ export default class RolesModal extends React.PureComponent {
                     </InputGroup>
                     <br/>
                     <Panel>
-                        <Panel.Body style={panelBodyStyle}>
+                        <Panel.Body style={panelBodyStyle} onChange={this.changeSendMessages}>
                             <Checkbox>
                                 Send Messages
                             </Checkbox>
@@ -117,7 +197,7 @@ export default class RolesModal extends React.PureComponent {
                         <Panel.Footer style={panelFooterStyle}>Allows a user to send messages.</Panel.Footer>
                     </Panel>            
                     <Panel>
-                        <Panel.Body style={panelBodyStyle}>
+                        <Panel.Body style={panelBodyStyle} onChange={this.changeUpload}>
                             <Checkbox>
                                 Upload Files
                             </Checkbox>
@@ -125,7 +205,7 @@ export default class RolesModal extends React.PureComponent {
                         <Panel.Footer style={panelFooterStyle}>Allows a user to upload files.</Panel.Footer>
                     </Panel>     
                     <Panel>
-                        <Panel.Body style={panelBodyStyle}>
+                        <Panel.Body style={panelBodyStyle} onChange={this.changeMute}>
                             <Checkbox>
                                 Mute Users
                             </Checkbox>
@@ -133,7 +213,7 @@ export default class RolesModal extends React.PureComponent {
                         <Panel.Footer style={panelFooterStyle}>Allows a user to mute members using the /mute command.</Panel.Footer>
                     </Panel>     
                     <Panel>
-                        <Panel.Body style={panelBodyStyle}>
+                        <Panel.Body style={panelBodyStyle} onChange={this.changeKick}>
                             <Checkbox>
                                 Kick Users
                             </Checkbox>
@@ -141,7 +221,7 @@ export default class RolesModal extends React.PureComponent {
                         <Panel.Footer style={panelFooterStyle}>Allows a user to kick members using the /kick command.</Panel.Footer>
                     </Panel>         
                     <Panel>
-                        <Panel.Body style={panelBodyStyle}>
+                        <Panel.Body style={panelBodyStyle} onChange={this.changeBan}>
                             <Checkbox>
                                 Ban Users
                             </Checkbox>
@@ -149,7 +229,7 @@ export default class RolesModal extends React.PureComponent {
                         <Panel.Footer style={panelFooterStyle}>Allows a user to ban members using the /ban command.</Panel.Footer>
                     </Panel>       
                     <Panel>
-                        <Panel.Body style={panelBodyStyle}>
+                        <Panel.Body style={panelBodyStyle} onChange={this.changePin}>
                             <Checkbox>
                                 Pin Messages
                             </Checkbox>
@@ -162,12 +242,19 @@ export default class RolesModal extends React.PureComponent {
                                 type="text"
                                 placeholder="Username"
                             />
-                            <Button bsStyle="success">
+                            <Button 
+                                bsStyle="success"
+                                onClick={this.addUser}
+                            >
                                 Add User
                             </Button>
                         </ListGroupItem>
                         <ListGroupItem>Member 1 
-                            <Button bsStyle="danger" bsSize="xsmall">
+                            <Button 
+                                bsStyle="danger" 
+                                bsSize="xsmall"
+                                onClick={this.removeUser}
+                            >
                                 Remove
                             </Button>
                         </ListGroupItem>

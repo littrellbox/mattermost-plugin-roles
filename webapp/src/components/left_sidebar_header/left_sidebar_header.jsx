@@ -17,6 +17,8 @@ export default class LeftSidebarHeader extends React.PureComponent {
     }
 
     startModal() {
+        var request = {}
+        request.teamID = this.props.teamid
         httpRequest = new XMLHttpRequest();
         httpRequest.onreadyload = function(e) {
             if (httpRequest.readyState == 4) {
@@ -31,7 +33,7 @@ export default class LeftSidebarHeader extends React.PureComponent {
         }
         httpRequest.open('POST', "/plugins/me.william341.mattermost-plugin-roles/api/v1/roles/user/getallpermissions", true);
         httpRequest.setRequestHeader('Content-Type', 'application/json; charset=UTF-8')
-        httpRequest.send('{"team_id": "' + this.props.teamid + `"}`)
+        httpRequest.send(JSON.stringify(request))
     }
 
     constructor(props) {
@@ -86,7 +88,7 @@ export default class LeftSidebarHeader extends React.PureComponent {
                 />
                 <div onClick={this.handleChildClick}>
                     {this.state.showingRoleBox &&
-                        <RolesModal theme={this.props.theme} doClose={this.toggleModal} roleList={this.state.rolelist}/>
+                        <RolesModal theme={this.props.theme} doClose={this.toggleModal} roleList={this.state.rolelist} teamid={this.props.teamid}/>
                     }
                 </div>
             </div>
